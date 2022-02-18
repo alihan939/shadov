@@ -2,6 +2,7 @@
 clear
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
+export ENCRYPTION=chacha20-ietf-poly1305
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"$
 
 ############################## Скрипты #####################################
@@ -1270,9 +1271,9 @@ Set_config_method(){
 ————————————
  ${Green_font_prefix}14.${Font_color_suffix} salsa20
  ${Green_font_prefix}15.${Font_color_suffix} chacha20
- ${Green_font_prefix}16.${Font_color_suffix} chacha20-ietf
+ ${Green_font_prefix}16.${Font_color_suffix} chacha20-ietf-poly1305
 ————————————"
-	read -e -p "(По умолчанию: 16. chacha20-ietf): " ssr_method
+	read -e -p "(По умолчанию: 16. chacha20-ietf-poly1305): " ssr_method
 	[[ -z "${ssr_method}" ]] && ssr_method="16"
 	if [[ ${ssr_method} == "1" ]]; then
 		ssr_method="none"
@@ -1305,9 +1306,9 @@ Set_config_method(){
 	elif [[ ${ssr_method} == "15" ]]; then
 		ssr_method="chacha20"
 	elif [[ ${ssr_method} == "16" ]]; then
-		ssr_method="chacha20-ietf"
+		ssr_method="chacha20-ietf-poly1305"
 	else
-		ssr_method="chacha20-ietf"
+		ssr_method="chacha20-ietf-poly1305"
 	fi
 	echo && echo ${Separator_1} && echo -e "    Шифрование : ${Green_font_prefix}${ssr_method}${Font_color_suffix}" && echo ${Separator_1} && echo
 }
@@ -1510,7 +1511,7 @@ Set_config_password_fast(){
 	ssr_password=$(date +%s%N | md5sum | head -c 16)
 }
 Set_config_method_fast(){
-	ssr_method="chacha20-ietf"
+	ssr_method="chacha20-ietf-poly1305"
 }
 Set_config_protocol_fast(){
 	ssr_protocol="origin"
