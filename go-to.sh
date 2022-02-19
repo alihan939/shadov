@@ -500,18 +500,18 @@ View_user_connection_info_1(){
 }
 View_user_connection_info(){
 	check_installed_status
-	echo && echo -e "请选择要显示的格式：
- ${Green_font_prefix}1.${Font_color_suffix} 显示 IP 格式
- ${Green_font_prefix}2.${Font_color_suffix} 显示 IP+IP归属地 格式" && echo
-	read -e -p "(默认: 1):" connection_info
+	echo && echo -e "Пожалуйста, выберите формат для отображения：
+ ${Green_font_prefix}1.${Font_color_suffix} показать IP-формат
+ ${Green_font_prefix}2.${Font_color_suffix} показывать IP+IPФормат атрибуции" && echo
+	read -e -p "(По умолчанию: 1):" connection_info
 	[[ -z "${connection_info}" ]] && connection_info="1"
 	if [[ "${connection_info}" == "1" ]]; then
 		View_user_connection_info_1
 	elif [[ "${connection_info}" == "2" ]]; then
-		echo -e "${Tip} 检测IP归属地(ipip.net)，如果IP较多，可能时间会比较长..."
+		echo -e "${Tip} Обнаружение атрибуции IP(ipip.net)，Если IP-адресов больше, время может увеличиться...."
 		View_user_connection_info_1 "IP_address"
 	else
-		echo -e "${Error} 请输入正确的数字(1-2)" && exit 1
+		echo -e "${Error} Пожалуйста, введите правильный номер(1-2)" && exit 1
 	fi
 }
 get_IP_address(){
@@ -529,18 +529,18 @@ Set_crontab_monitor(){
 	check_crontab_installed_status
 	crontab_monitor_status=$(crontab -l|grep "ss-go.sh monitor")
 	if [[ -z "${crontab_monitor_status}" ]]; then
-		echo && echo -e "当前监控模式: ${Red_font_prefix}未开启${Font_color_suffix}" && echo
-		echo -e "确定要开启 ${Green_font_prefix}Shadowsocks 服务端运行状态监控${Font_color_suffix} 功能吗？(当进程关闭则自动启动 Shadowsocks 服务端)[Y/n]"
-		read -e -p "(默认: y):" crontab_monitor_status_ny
+		echo && echo -e "Текущий режим мониторинга: ${Red_font_prefix}Неоткрытый${Font_color_suffix}" && echo
+		echo -e "уверен, что хочешь включить ${Green_font_prefix}Сервер Shadowsocks выполняет мониторинг состояния${Font_color_suffix} функция? (При закрытии процесса автоматически запускается сервер Shadowsocks)[Y/n]"
+		read -e -p "(По умолчанию: y):" crontab_monitor_status_ny
 		[[ -z "${crontab_monitor_status_ny}" ]] && crontab_monitor_status_ny="y"
 		if [[ ${crontab_monitor_status_ny} == [Yy] ]]; then
 			crontab_monitor_cron_start
 		else
-			echo && echo "	已取消..." && echo
+			echo && echo "	Отменено..." && echo
 		fi
 	else
-		echo && echo -e "当前监控模式: ${Green_font_prefix}已开启${Font_color_suffix}" && echo
-		echo -e "确定要关闭 ${Red_font_prefix}Shadowsocks 服务端运行状态监控${Font_color_suffix} 功能吗？(当进程关闭则自动启动 Shadowsocks 服务端)[y/N]"
+		echo && echo -e "Текущий режим мониторинга: ${Green_font_prefix}включено${Font_color_suffix}" && echo
+		echo -e "уверен, что хочешь закрыть ${Red_font_prefix}Сервер Shadowsocks выполняет мониторинг состояния${Font_color_suffix} функция? (При закрытии процесса автоматически запускается сервер Shadowsocks)[y/N]"
 		read -e -p "(默认: n):" crontab_monitor_status_ny
 		[[ -z "${crontab_monitor_status_ny}" ]] && crontab_monitor_status_ny="n"
 		if [[ ${crontab_monitor_status_ny} == [Yy] ]]; then
@@ -558,9 +558,9 @@ crontab_monitor_cron_start(){
 	rm -r "$file_1/crontab.bak"
 	cron_config=$(crontab -l | grep "ss-go.sh monitor")
 	if [[ -z ${cron_config} ]]; then
-		echo -e "${Error} Shadowsocks 服务端运行状态监控功能 启动失败 !" && exit 1
+		echo -e "${Error} Shadowsocks Не удалось запустить функцию мониторинга состояния сервера !" && exit 1
 	else
-		echo -e "${Info} Shadowsocks 服务端运行状态监控功能 启动成功 !"
+		echo -e "${Info} Shadowsocks На сервере запущена функция мониторинга состояния. Запущен успешно. !"
 	fi
 }
 crontab_monitor_cron_stop(){
@@ -570,9 +570,9 @@ crontab_monitor_cron_stop(){
 	rm -r "$file_1/crontab.bak"
 	cron_config=$(crontab -l | grep "ss-go.sh monitor")
 	if [[ ! -z ${cron_config} ]]; then
-		echo -e "${Error} Shadowsocks 服务端运行状态监控功能 停止失败 !" && exit 1
+		echo -e "${Error} Shadowsocks Функция мониторинга состояния сервера не останавливается !" && exit 1
 	else
-		echo -e "${Info} Shadowsocks 服务端运行状态监控功能 停止成功 !"
+		echo -e "${Info} Shadowsocks На сервере запущена функция мониторинга состояния. Остановлен успешно. !"
 	fi
 }
 crontab_monitor(){
@@ -580,17 +580,17 @@ crontab_monitor(){
 	check_pid
 	#echo "${PID}"
 	if [[ -z ${PID} ]]; then
-		echo -e "${Error} [$(date "+%Y-%m-%d %H:%M:%S %u %Z")] 检测到 Shadowsocks服务端 未运行 , 开始启动..." | tee -a ${LOG}
+		echo -e "${Error} [$(date "+%Y-%m-%d %H:%M:%S %u %Z")] Обнаружено, что сервер Shadowsocks не запущен и запускается..." | tee -a ${LOG}
 		/etc/init.d/ss-go start
 		sleep 1s
 		check_pid
 		if [[ -z ${PID} ]]; then
-			echo -e "${Error} [$(date "+%Y-%m-%d %H:%M:%S %u %Z")] Shadowsocks服务端 启动失败..." | tee -a ${LOG}
+			echo -e "${Error} [$(date "+%Y-%m-%d %H:%M:%S %u %Z")] Shadowsocks Не удалось запустить сервер..." | tee -a ${LOG}
 		else
-			echo -e "${Info} [$(date "+%Y-%m-%d %H:%M:%S %u %Z")] Shadowsocks服务端 启动成功..." | tee -a ${LOG}
+			echo -e "${Info} [$(date "+%Y-%m-%d %H:%M:%S %u %Z")] Shadowsocks Сервер запущен успешно..." | tee -a ${LOG}
 		fi
 	else
-		echo -e "${Info} [$(date "+%Y-%m-%d %H:%M:%S %u %Z")] Shadowsocks服务端 进程运行正常..." | tee -a ${LOG}
+		echo -e "${Info} [$(date "+%Y-%m-%d %H:%M:%S %u %Z")] Shadowsocks Серверный процесс работает нормально..." | tee -a ${LOG}
 	fi
 }
 Add_iptables(){
@@ -629,49 +629,49 @@ Set_iptables(){
 }
 Update_Shell(){
 	sh_new_ver=$(wget --no-check-certificate -qO- -t1 -T3 "https://raw.githubusercontent.com/ToyoDAdoubiBackup/doubi/master/ss-go.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1) && sh_new_type="github"
-	[[ -z ${sh_new_ver} ]] && echo -e "${Error} 无法链接到 Github !" && exit 0
+	[[ -z ${sh_new_ver} ]] && echo -e "${Error} не могу сослаться на Github !" && exit 0
 	if [[ -e "/etc/init.d/ss-go" ]]; then
 		rm -rf /etc/init.d/ss-go
 		Service
 	fi
 	wget -N --no-check-certificate "https://raw.githubusercontent.com/ToyoDAdoubiBackup/doubi/master/ss-go.sh" && chmod +x ss-go.sh
-	echo -e "脚本已更新为最新版本[ ${sh_new_ver} ] !(注意：因为更新方式为直接覆盖当前运行的脚本，所以可能下面会提示一些报错，无视即可)" && exit 0
+	echo -e "Скрипт обновлен до последней версии[ ${sh_new_ver} ] !(Примечание. Поскольку метод обновления заключается в прямой перезаписи текущего сценария, ниже могут появиться сообщения об ошибках, просто игнорируйте их.)" && exit 0
 }
 check_sys
 action=$1
 if [[ "${action}" == "monitor" ]]; then
 	crontab_monitor
 else
-	echo && echo -e "  Shadowsocks-Go 一键管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
+	echo && echo -e "  Shadowsocks-Go 一сценарий управления ключами ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
   ---- Toyo | doub.io/ss-jc67 ----
   
- ${Green_font_prefix} 0.${Font_color_suffix} 升级脚本
+ ${Green_font_prefix} 0.${Font_color_suffix} скрипт обновления
 ————————————
- ${Green_font_prefix} 1.${Font_color_suffix} 安装 Shadowsocks
- ${Green_font_prefix} 2.${Font_color_suffix} 更新 Shadowsocks
- ${Green_font_prefix} 3.${Font_color_suffix} 卸载 Shadowsocks
+ ${Green_font_prefix} 1.${Font_color_suffix} Установить Shadowsocks
+ ${Green_font_prefix} 2.${Font_color_suffix} возобновить Shadowsocks
+ ${Green_font_prefix} 3.${Font_color_suffix} удалить Shadowsocks
 ————————————
- ${Green_font_prefix} 4.${Font_color_suffix} 启动 Shadowsocks
- ${Green_font_prefix} 5.${Font_color_suffix} 停止 Shadowsocks
- ${Green_font_prefix} 6.${Font_color_suffix} 重启 Shadowsocks
+ ${Green_font_prefix} 4.${Font_color_suffix} запускать Shadowsocks
+ ${Green_font_prefix} 5.${Font_color_suffix} остановка Shadowsocks
+ ${Green_font_prefix} 6.${Font_color_suffix} перезагружать Shadowsocks
 ————————————
- ${Green_font_prefix} 7.${Font_color_suffix} 设置 账号配置
- ${Green_font_prefix} 8.${Font_color_suffix} 查看 账号信息
- ${Green_font_prefix} 9.${Font_color_suffix} 查看 日志信息
- ${Green_font_prefix}10.${Font_color_suffix} 查看 链接信息
+ ${Green_font_prefix} 7.${Font_color_suffix} Настройки Конфигурация учетной записи
+ ${Green_font_prefix} 8.${Font_color_suffix} Просмотр информации об учетной записи
+ ${Green_font_prefix} 9.${Font_color_suffix} Просмотр информации журнала
+ ${Green_font_prefix}10.${Font_color_suffix} Посмотреть информацию о ссылке
 ————————————" && echo
 	if [[ -e ${FILE} ]]; then
 		check_pid
 		if [[ ! -z "${PID}" ]]; then
-			echo -e " 当前状态: ${Green_font_prefix}已安装${Font_color_suffix} 并 ${Green_font_prefix}已启动${Font_color_suffix}"
+			echo -e " Текущий статус: ${Green_font_prefix}установлено{Font_color_suffix} а также ${Green_font_prefix}запущен{Font_color_suffix}"
 		else
-			echo -e " 当前状态: ${Green_font_prefix}已安装${Font_color_suffix} 但 ${Red_font_prefix}未启动${Font_color_suffix}"
+			echo -e " Текущий статус: ${Green_font_prefix}установлено{Font_color_suffix} но ${Red_font_prefix}не запущен{Font_color_suffix}"
 		fi
 	else
-		echo -e " 当前状态: ${Red_font_prefix}未安装${Font_color_suffix}"
+		echo -e " Текущий статус: ${Red_font_prefix}не установлен{Font_color_suffix}"
 	fi
 	echo
-	read -e -p " 请输入数字 [0-10]:" num
+	read -e -p " Пожалуйста, введите цифры [0-10]:" num
 	case "$num" in
 		0)
 		Update_Shell
@@ -707,7 +707,7 @@ else
 		View_user_connection_info
 		;;
 		*)
-		echo "请输入正确数字 [0-10]"
+		echo "Пожалуйста, введите правильный номер [0-10]"
 		;;
 	esac
 fi
