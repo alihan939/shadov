@@ -663,12 +663,12 @@ else
 	if [[ -e ${FILE} ]]; then
 		check_pid
 		if [[ ! -z "${PID}" ]]; then
-			echo -e " Текущий статус: ${Green_font_prefix}установлено{Font_color_suffix} а также ${Green_font_prefix}запущен{Font_color_suffix}"
+			echo -e " Текущий статус: ${Green_font_prefix}установлено ${Font_color_suffix} а также ${Green_font_prefix}запущен ${Font_color_suffix}"
 		else
-			echo -e " Текущий статус: ${Green_font_prefix}установлено{Font_color_suffix} но ${Red_font_prefix}не запущен{Font_color_suffix}"
+			echo -e " Текущий статус: ${Green_font_prefix}установлено ${Font_color_suffix} но ${Red_font_prefix}не запущен ${Font_color_suffix}"
 		fi
 	else
-		echo -e " Текущий статус: ${Red_font_prefix}не установлен{Font_color_suffix}"
+		echo -e " Текущий статус: ${Red_font_prefix}не установлен ${Font_color_suffix}"
 	fi
 	echo
 	read -e -p " Пожалуйста, введите цифры [0-10]:" num
